@@ -50,7 +50,7 @@ GitHub 安装：
 
 ## 使用
 
-1. 打开 Web GUI → 设置 → 侧栏选「Lan Gate」。
+1. 打开 Web GUI → 设置 → 侧栏选「赤橙网关」。
 2. 首次进入弹出安全确认，勾选「我已阅读并了解上述安全风险」→ 点「同意」。
 3. 设置面板密码（推荐）：在「面板密码」卡片输入至少 8 位密码并保存。
 4. 配置 frpc（如需公网访问）：在「内网穿透 (frpc)」卡片填服务器地址、端口、token、本机端口（默认 3081，不可用 3080）、远程端口。
@@ -70,7 +70,7 @@ GitHub 安装：
   - 面板密码门禁：包住 HTTP server 的 request/upgrade，非本机访问要求会话 cookie；提供 /chicheng-gate/login、/chicheng-gate/logout、/chicheng-gate/password、/chicheng-gate/status、/chicheng-gate/restart 路由。
   - frpc 管理：自动下载/启动/停止 frpc（存放于 $DSH_HOME/frpc/，PID 记在 frpc.pid），按设置实时开关。
   - 独立密码网关：监听 127.0.0.1 的「本机端口」，反向代理（HTTP + WebSocket + SSE）到 DSH 主端口，复用同一套密码/会话。
-- 客户端（lib/client.js）：在设置侧栏注册「Lan Gate」分区，卡片式渲染远程访问 / 面板密码 / frpc / 手机端 UI，通过 settingsScope 读写设置。
+- 客户端（lib/client.js）：在设置侧栏注册「赤橙网关」分区，卡片式渲染远程访问 / 面板密码 / frpc / 手机端 UI，通过 settingsScope 读写设置。
 
 设置命名空间：chicheng-gate（写入 settings.yaml）：
 
