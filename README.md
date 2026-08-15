@@ -1,4 +1,4 @@
-# dsh-remote-access
+# dsh-lan-gate
 
 DSH Web GUI 插件：**远程访问 / 局域网访问控制 + 手机端 UI 适配**。
 
@@ -46,15 +46,15 @@ os.homedir() 回退），不写死用户名 / 绝对路径，换机器换用户�
 
 ## 安装
 
-npm 上有一个同名包 dsh-remote-access@0.4.11（作者 KongXiangning，与本项目无关）。
+npm 上有一个同名包 dsh-lan-gate@0.4.11（作者 KongXiangning，与本项目无关）。
 为避免覆盖，请用 GitHub 方式安装本插件：
 
-    dsh plugin --profile web add github:534119219/dsh-remote-access
+    dsh plugin --profile web add github:534119219/dsh-lan-gate
 
 安装后在 profile 的 package.json 里会得到：
 
     "dependencies": {
-      "dsh-remote-access": "github:534119219/dsh-remote-access"
+      "dsh-lan-gate": "github:534119219/dsh-lan-gate"
     }
 
 一定要用 github: 前缀（而不是裸 0.1.0），这样插件市场会把它当作 GitHub 来源，
@@ -78,14 +78,14 @@ npm 上有一个同名包 dsh-remote-access@0.4.11（作者 KongXiangning，与�
 
 - 主机侧（lib/index.js）：启动早期读取设置，提供 remoteAccess 服务
   （决定 webserver.host 与 connection.trustedHosts），按开关应用/还原源码补丁
-  （带 .dsh-remote-access.bak 备份），注入 polyfill 与移动端 CSS，注册
-  /remote-access/dhcp 路由。
+  （带 .dsh-lan-gate.bak 备份），注入 polyfill 与移动端 CSS，注册
+  /lan-gate/dhcp 路由。
 - 客户端（lib/client.js）：在设置侧栏注册「远程访问」分区，渲染三个控件与
   安全确认弹窗，通过 settingsScope 读写设置。
 
-设置命名空间：dsh-remote-access（写入 settings.yaml）：
+设置命名空间：dsh-lan-gate（写入 settings.yaml）：
 
-    dsh-remote-access:
+    dsh-lan-gate:
       consented: false
       remoteEnabled: false
       dhcpAddress: ""

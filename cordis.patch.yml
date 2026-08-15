@@ -1,4 +1,4 @@
-# dsh-remote-access bundle patch
+# dsh-lan-gate bundle patch
 #
 # Bind host + trust fence from the remoteAccess service (provided early by
 # this plugin). webserver/connection MUST inject remoteAccess so the service
@@ -17,5 +17,5 @@
   config:
     trustedHosts: !!js ctx.remoteAccess.trustedHosts
 - insert:
-    - id: remote-access
-      name: 'dsh-remote-access'
+    - id: lan-gate
+      name: 'dsh-lan-gate'
