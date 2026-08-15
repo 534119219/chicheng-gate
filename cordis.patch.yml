@@ -1,4 +1,4 @@
-# dsh-lan-gate bundle patch
+# chicheng-gate bundle patch
 #
 # Bind host + trust fence from the remoteAccess service (provided early by
 # this plugin). webserver/connection MUST inject remoteAccess so the service
@@ -25,5 +25,5 @@
     surfaceContext: true
     trustedHosts: !!js ctx.remoteAccess.trustedHosts
 - insert:
-    - id: lan-gate
-      name: 'dsh-lan-gate'
+    - id: chicheng-gate
+      name: 'chicheng-gate'

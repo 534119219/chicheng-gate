@@ -1,4 +1,4 @@
-# dsh-lan-gate
+# chicheng-gate
 
 DSH Web GUI 插件：远程访问控制 + frpc 内网穿透 + 面板密码门禁 + 手机端 UI 适配。
 
@@ -38,12 +38,12 @@ DSH Web GUI 插件：远程访问控制 + frpc 内网穿透 + 面板密码门禁
 
 GitHub 安装：
 
-    dsh plugin --profile web add github:534119219/dsh-lan-gate
+    dsh plugin --profile web add github:534119219/chicheng-gate
 
 安装后在 profile 的 package.json 里会得到：
 
     "dependencies": {
-      "dsh-lan-gate": "github:534119219/dsh-lan-gate"
+      "chicheng-gate": "github:534119219/chicheng-gate"
     }
 
 ---
@@ -66,15 +66,15 @@ GitHub 安装：
 
 - 主机侧（lib/index.js）：
   - 启动早期读取设置，提供 remoteAccess 服务（决定 webserver.host 与 connection.trustedHosts），并给 web-runtime 注入同一 trust 列表（供 /api 与 dsh-better-sidebar 等 fence 使用）。
-  - 按开关应用/还原 4 处官方源码补丁（打补丁前自动备份 .dsh-lan-gate.bak，关闭时还原）。
-  - 面板密码门禁：包住 HTTP server 的 request/upgrade，非本机访问要求会话 cookie；提供 /lan-gate/login、/lan-gate/logout、/lan-gate/password、/lan-gate/status、/lan-gate/restart 路由。
+  - 按开关应用/还原 4 处官方源码补丁（打补丁前自动备份 .chicheng-gate.bak，关闭时还原）。
+  - 面板密码门禁：包住 HTTP server 的 request/upgrade，非本机访问要求会话 cookie；提供 /chicheng-gate/login、/chicheng-gate/logout、/chicheng-gate/password、/chicheng-gate/status、/chicheng-gate/restart 路由。
   - frpc 管理：自动下载/启动/停止 frpc（存放于 $DSH_HOME/frpc/，PID 记在 frpc.pid），按设置实时开关。
   - 独立密码网关：监听 127.0.0.1 的「本机端口」，反向代理（HTTP + WebSocket + SSE）到 DSH 主端口，复用同一套密码/会话。
 - 客户端（lib/client.js）：在设置侧栏注册「Lan Gate」分区，卡片式渲染远程访问 / 面板密码 / frpc / 手机端 UI，通过 settingsScope 读写设置。
 
-设置命名空间：dsh-lan-gate（写入 settings.yaml）：
+设置命名空间：chicheng-gate（写入 settings.yaml）：
 
-    dsh-lan-gate:
+    chicheng-gate:
       consented: false
       remoteEnabled: false
       mobileUi: true

@@ -1,15 +1,15 @@
 {
-  "name": "dsh-lan-gate",
+  "name": "chicheng-gate",
   "version": "2.0.0",
   "description": "DSH Web 插件：局域网/远程访问控制、frpc 内网穿透、面板密码门禁与手机端 UI 适配。",
   "author": "534119219",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/534119219/dsh-lan-gate.git"
+    "url": "git+https://github.com/534119219/chicheng-gate.git"
   },
   "bugs": {
-    "url": "https://github.com/534119219/dsh-lan-gate/issues"
+    "url": "https://github.com/534119219/chicheng-gate/issues"
   },
   "type": "module",
   "main": "lib/index.js",
@@ -19,7 +19,7 @@
     "./package.json": "./package.json"
   },
   "files": ["lib", "cordis.patch.yml", "README.md", "LICENSE"],
-  "keywords": ["dsh", "dsh-plugin", "lan-gate", "lan", "frp", "frpc", "tunnel", "remote-access", "mobile"],
+  "keywords": ["dsh", "dsh-plugin", "chicheng-gate", "lan", "frp", "frpc", "tunnel", "remote-access", "mobile"],
   "engines": { "node": ">=20" },
   "peerDependencies": {
     "@deepseek-ai/cordis": "^4.0.1",
