@@ -1,7 +1,7 @@
 {
   "name": "dsh-lan-gate",
   "version": "2.0.0",
-  "description": "DSH web plugin: LAN/remote access control, frpc tunnel, panel password gate, and mobile UI adaptation.",
+  "description": "DSH Web 插件：局域网/远程访问控制、frpc 内网穿透、面板密码门禁与手机端 UI 适配。",
   "author": "534119219",
   "license": "MIT",
   "repository": {
