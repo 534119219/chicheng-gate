@@ -46,8 +46,7 @@ os.homedir() 回退），不写死用户名 / 绝对路径，换机器换用户�
 
 ## 安装
 
-npm 上有一个同名包 dsh-lan-gate@0.4.11（作者 KongXiangning，与本项目无关）。
-为避免覆盖，请用 GitHub 方式安装本插件：
+本插件目前发布在 GitHub（尚未发布到 npm），用 GitHub 方式安装：
 
     dsh plugin --profile web add github:534119219/dsh-lan-gate
 
@@ -56,9 +55,6 @@ npm 上有一个同名包 dsh-lan-gate@0.4.11（作者 KongXiangning，与本项
     "dependencies": {
       "dsh-lan-gate": "github:534119219/dsh-lan-gate"
     }
-
-一定要用 github: 前缀（而不是裸 0.1.0），这样插件市场会把它当作 GitHub 来源，
-不会去 npm 查那个同名包，也就不会误报「可更新」。
 
 重启：dsh web（切换远程控制 / 手机端 UI 后也需要重启生效，因为 webserver 只在启动时绑定一次）。
 
@@ -99,7 +95,6 @@ npm 上有一个同名包 dsh-lan-gate@0.4.11（作者 KongXiangning，与本项
 - 资源管理器 / 设置显示 403 或 HTTP 400：确认远程控制已开、DHCP 地址正确、
   trustedHosts 包含局域网 IP，并已重启。
 - 换机器 / 换用户路径变了：本插件动态解析路径，无需手改。
-- 插件市场误报「可更新」：用 github: 安装即可避免。
 
 ---
 
