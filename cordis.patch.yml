@@ -16,6 +16,14 @@
     - remoteAccess
   config:
     trustedHosts: !!js ctx.remoteAccess.trustedHosts
+- id: web-runtime
+  inject:
+    - webStartup
+    - remoteAccess
+  config:
+    printUrl: true
+    surfaceContext: true
+    trustedHosts: !!js ctx.remoteAccess.trustedHosts
 - insert:
     - id: lan-gate
       name: 'dsh-lan-gate'
