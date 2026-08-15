@@ -1,0 +1,21 @@
+# dsh-remote-access bundle patch
+#
+# Bind host + trust fence from the remoteAccess service (provided early by
+# this plugin). webserver/connection MUST inject remoteAccess so the service
+# resolves during their config interpolation.
+- id: webserver
+  inject:
+    - webStartup
+    - remoteAccess
+  config:
+    host: !!js ctx.remoteAccess.host
+    port: !!js ctx.webStartup.port ?? 3080
+- id: connection
+  inject:
+    - webRuntime
+    - remoteAccess
+  config:
+    trustedHosts: !!js ctx.remoteAccess.trustedHosts
+- insert:
+    - id: remote-access
+      name: 'dsh-remote-access'

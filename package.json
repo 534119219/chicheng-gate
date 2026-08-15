@@ -1,0 +1,41 @@
+{
+  "name": "dsh-remote-access",
+  "version": "0.1.0",
+  "description": "DSH web plugin: toggle 0.0.0.0 LAN/remote access with DHCP auto-detect and a security consent gate, plus mobile UI adaptation. Trusted networks only.",
+  "author": "534119219",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/534119219/dsh-remote-access.git"
+  },
+  "bugs": {
+    "url": "https://github.com/534119219/dsh-remote-access/issues"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./package.json": "./package.json"
+  },
+  "files": ["lib", "cordis.patch.yml", "README.md", "LICENSE"],
+  "keywords": ["dsh", "dsh-plugin", "remote-access", "lan", "dhcp", "mobile"],
+  "engines": { "node": ">=20" },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.1",
+    "schemastery": "^3.18.0"
+  },
+  "dependencies": { "schemastery": "^3.18.0" },
+  "dsh": {
+    "bundle": { "patch": "./cordis.patch.yml" },
+    "client": {
+      "inject": [
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-slots",
+        "@deepseek-ai/dsh-client-ui-settings",
+        "@deepseek-ai/dsh-client-ui-primitives"
+      ],
+      "platform": "web"
+    }
+  }
+}
