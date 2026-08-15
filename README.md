@@ -1,52 +1,42 @@
 # dsh-lan-gate
 
-DSH Web GUI 插件：**远程访问 / 局域网访问控制 + 手机端 UI 适配**。
+DSH Web GUI 插件：远程访问控制 + frpc 内网穿透 + 面板密码门禁 + 手机端 UI 适配。
 
-在设置面板里一键开关 0.0.0.0 绑定，让手机等局域网设备能访问你的
-DeepSeek Harness Web GUI；关闭后自动还原所有被修改的文件和配置。附带
-DHCP 地址自动获取，以及一套手机端 UI 优化。
+在设置面板里统一管理：
+
+- 远程访问：一键切换 Web GUI 绑定 0.0.0.0 / 127.0.0.1，让局域网设备可访问；关闭时自动还原所有修改。
+- frpc 内网穿透：自动下载并拉起 frpc，把面板映射到公网 frps 服务器，可随时开/停。
+- 面板密码门禁：非本机访问必须先通过密码验证（scrypt 加盐哈希 + 会话 cookie + 登录限速）。
+- 手机端 UI：注入移动端适配 CSS。
 
 ---
 
 ## ⚠️ 安全警告（务必先读）
 
-开启「远程控制」会把 Web GUI 绑定到 0.0.0.0（所有网卡），局域网内
-任何设备都可以通过 http://<本机IP>:3080 访问并**操作**你的 Harness
-（会话、文件、终端、凭据、代码执行等）。
+开启「远程访问」会把 Web GUI 绑定到 0.0.0.0（所有网卡），局域网内任何设备都能访问并操作你的 Harness（会话、文件、终端、凭据、代码执行等）。
 
-- 仅在你信任的网络（如家庭 Wi-Fi）使用。
-- 在公共 / 不可信网络开启，等同于把完整控制权暴露给他人。
-- 本插件不会做用户鉴权——它只做「是否允许局域网访问」的开关。
+开启「frpc 内网穿透」会把面板暴露到公网。强烈建议同时设置「面板密码」——本插件的密码门禁会对所有非本机访问（包括走 frp 隧道的访问）要求先登录。
 
-开启后插件会修改以下内容（关闭时自动还原）：
-
-1. 配置（bundle patch 生效，重启后应用）：
-   - webserver.host -> 0.0.0.0
-   - connection.trustedHosts -> DHCP 地址 + 自动检测的局域网 IP
-2. 4 处官方包源码补丁（按需，打补丁前自动备份，关闭时从备份还原）：
-   - @deepseek-ai/dsh-client-connection/lib/index.js —— 连接权限白名单
-   - @deepseek-ai/dsh-client-ui-settings/lib/client.js —— 设置持久化
-   - @deepseek-ai/dsh-client-ui-settings-general/lib/client.js —— 移动端两步设置
-   - @deepseek-ai/dsh-host-apiproxy/lib/index.js —— 暴露本插件设置命名空间
-
-所有路径都通过运行时动态解析（process.argv[1] 推导 DSH 安装根 +
-os.homedir() 回退），不写死用户名 / 绝对路径，换机器换用户也能用。
+- 仅在你信任的网络使用。
+- 公网 / 不可信网络开启，等同于把完整控制权暴露给他人，请务必设置强密码。
 
 ---
 
 ## 功能特性
 
-- 远程控制开关（默认关）：切换 0.0.0.0 与 127.0.0.1 绑定；关闭时还原全部修改。
-- DHCP 地址输入框 + 「自动获取」按钮：从服务器读取当前局域网 IP 填入。
-- 手机端 UI 调整开关（默认开）：注入移动端适配 CSS。
-- 首次使用安全确认：勾选「已阅读风险」并点「同意并启用」后才解锁远程开关。
-- crypto.randomUUID 补丁：修复局域网 HTTP 下 randomUUID 缺失问题。
+- 远程访问开关（默认关）：切换 0.0.0.0 与 127.0.0.1 绑定；关闭时还原全部修改。
+- frpc 内网穿透（默认关，实时开关）：启动时自动从 GitHub Releases 下载 frpc（带 SHA256 校验，失败回退手动路径），生成 frpc.toml 并拉起；取消勾选立即停止。配置项：服务器地址/端口、token 验证、本机端口、远程端口。
+- 面板密码门禁：非 127.0.0.1 来源必须先通过密码验证；密码只存加盐哈希，带登录限速（5 次/分/IP）与 7 天会话。
+- 独立密码网关：frpc 隧道不直连 DSH，而是先经过一个本地密码网关（127.0.0.1 的「本机端口」，默认 3081），验证通过后才转发到 DSH 主端口 3080——这样公网隧道也需要密码，而本机 127.0.0.1 免密访问不受影响。
+- 手机端 UI 调整（默认开）：注入移动端适配 CSS。
+- 首次使用安全确认：阅读并确认风险后才解锁开关。
+- crypto.randomUUID 补丁：修复局域网 HTTP 下 randomUUID 缺失。
 
 ---
 
 ## 安装
 
-本插件目前发布在 GitHub（尚未发布到 npm），用 GitHub 方式安装：
+GitHub 安装：
 
     dsh plugin --profile web add github:534119219/dsh-lan-gate
 
@@ -56,45 +46,58 @@ os.homedir() 回退），不写死用户名 / 绝对路径，换机器换用户�
       "dsh-lan-gate": "github:534119219/dsh-lan-gate"
     }
 
-重启：dsh web（切换远程控制 / 手机端 UI 后也需要重启生效，因为 webserver 只在启动时绑定一次）。
-
 ---
 
 ## 使用
 
-1. 打开 Web GUI → 右上角设置 → 侧栏选「远程访问」。
-2. 首次进入会弹出安全确认：勾选「我已阅读并了解上述安全风险」，点「同意并启用」。
-3. 打开「远程控制」开关；如需指定信任 IP，用「自动获取」填入 DHCP 地址。
-4. 按需切换「手机端 UI 调整」。
-5. 重启 dsh web，手机在同一局域网访问 http://<本机IP>:3080。
+1. 打开 Web GUI → 设置 → 侧栏选「Lan Gate」。
+2. 首次进入弹出安全确认，勾选「我已阅读并了解上述安全风险」→ 点「同意」。
+3. 设置面板密码（推荐）：在「面板密码」卡片输入至少 8 位密码并保存。
+4. 配置 frpc（如需公网访问）：在「内网穿透 (frpc)」卡片填服务器地址、端口、token、本机端口（默认 3081，不可用 3080）、远程端口。
+5. 打开「远程访问」开关（局域网访问）和/或「启用 frpc」（公网访问）。
+6. 重启 dsh web（远程访问和 frpc 配置改动需重启生效；frpc 的启用/停用开关本身是实时的）。
+7. 访问：
+   - 局域网：http://<本机IP>:3080
+   - 公网（frpc 隧道）：http://<frps公网IP>:<远程端口> —— 首次会弹登录页，输入面板密码。
 
 ---
 
 ## 工作原理
 
-- 主机侧（lib/index.js）：启动早期读取设置，提供 remoteAccess 服务
-  （决定 webserver.host 与 connection.trustedHosts），按开关应用/还原源码补丁
-  （带 .dsh-lan-gate.bak 备份），注入 polyfill 与移动端 CSS，注册
-  /lan-gate/dhcp 路由。
-- 客户端（lib/client.js）：在设置侧栏注册「远程访问」分区，渲染三个控件与
-  安全确认弹窗，通过 settingsScope 读写设置。
+- 主机侧（lib/index.js）：
+  - 启动早期读取设置，提供 remoteAccess 服务（决定 webserver.host 与 connection.trustedHosts），并给 web-runtime 注入同一 trust 列表（供 /api 与 dsh-better-sidebar 等 fence 使用）。
+  - 按开关应用/还原 4 处官方源码补丁（打补丁前自动备份 .dsh-lan-gate.bak，关闭时还原）。
+  - 面板密码门禁：包住 HTTP server 的 request/upgrade，非本机访问要求会话 cookie；提供 /lan-gate/login、/lan-gate/logout、/lan-gate/password、/lan-gate/status、/lan-gate/restart 路由。
+  - frpc 管理：自动下载/启动/停止 frpc（存放于 $DSH_HOME/frpc/，PID 记在 frpc.pid），按设置实时开关。
+  - 独立密码网关：监听 127.0.0.1 的「本机端口」，反向代理（HTTP + WebSocket + SSE）到 DSH 主端口，复用同一套密码/会话。
+- 客户端（lib/client.js）：在设置侧栏注册「Lan Gate」分区，卡片式渲染远程访问 / 面板密码 / frpc / 手机端 UI，通过 settingsScope 读写设置。
 
 设置命名空间：dsh-lan-gate（写入 settings.yaml）：
 
     dsh-lan-gate:
       consented: false
       remoteEnabled: false
-      dhcpAddress: ""
       mobileUi: true
+      frpcEnabled: false
+      frpcServerAddr: ""
+      frpcServerPort: 7000
+      frpcAuthMethod: token
+      frpcToken: ""
+      frpcLocalPort: 3081
+      frpcRemotePort: 3080
+      frpcPath: ""
+      panelPasswordHash: ""
+
+（panelPasswordHash 为 secret，settings 里只存哈希，不存明文。）
 
 ---
 
 ## 常见问题
 
-- 改了开关没生效：需要重启 dsh web。
-- 资源管理器 / 设置显示 403 或 HTTP 400：确认远程控制已开、DHCP 地址正确、
-  trustedHosts 包含局域网 IP，并已重启。
-- 换机器 / 换用户路径变了：本插件动态解析路径，无需手改。
+- 改了远程访问 / frpc 配置没生效：需要重启 dsh web（frpc 的「启用」开关本身是实时的，无需重启）。
+- frps 上不显示端口 / 公网打不开：检查 frpc 状态（设置页有实时状态），常见原因是「远程端口」在 frps 上被占用，或 frps 的 vhostHTTPPort 占用了同一个端口。换一个空闲端口即可。
+- 公网能打开但弹登录页：正常，走隧道必须输入面板密码；本机 127.0.0.1 不需要。
+- 资源管理器 / 设置 403：确认远程访问已开、trustedHosts 已包含访问来源，并已重启。
 
 ---
 
