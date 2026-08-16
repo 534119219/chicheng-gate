@@ -1,6 +1,6 @@
 {
   "name": "chicheng-gate",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "DSH Web 插件：局域网/远程访问控制、frpc 内网穿透、面板密码门禁与手机端 UI 适配。",
   "author": "534119219",
   "license": "MIT",
