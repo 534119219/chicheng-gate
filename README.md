@@ -32,6 +32,16 @@ DSH Web GUI 插件：远程访问控制 + frpc 内网穿透 + 面板密码门禁
 - 首次使用安全确认：阅读并确认风险后才解锁开关。
 - crypto.randomUUID 补丁：修复局域网 HTTP 下 randomUUID 缺失。
 
+## 截图
+
+| 设置页 | 密码登录页 |
+| :---: | :---: |
+| <img src="assets/settings.png" alt="设置页" width="220"> | <img src="assets/login-gate.png" alt="密码登录页" width="300"> |
+
+| 手机端 1 | 手机端 2 | 手机端 3 |
+| :---: | :---: | :---: |
+| <img src="assets/mobile-ui-1.png" alt="手机端 1" width="130"> | <img src="assets/mobile-ui-2.png" alt="手机端 2" width="130"> | <img src="assets/mobile-ui-3.png" alt="手机端 3" width="130"> |
+
 ---
 
 ## 安装
