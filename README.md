@@ -81,7 +81,7 @@ GitHub 安装：
 
 - 主机侧（lib/index.js）：
   - 启动早期读取设置，提供 remoteAccess 服务（决定 webserver.host 与 connection.trustedHosts），并给 web-runtime 注入同一 trust 列表（供 /api 与 dsh-better-sidebar 等 fence 使用）。
-  - 按开关应用/还原 4 处官方源码补丁（打补丁前自动备份 .chicheng-gate.bak，关闭时还原）。
+  - 按开关应用/还原 3 处官方源码补丁（打补丁前自动备份 .chicheng-gate.bak，关闭时还原）：远程访问（connection 特权方法白名单、设置持久化 host）、手机端两步设置、设置侧栏网关图标。
   - 面板密码门禁：包住 HTTP server 的 request/upgrade，非本机访问要求会话 cookie；提供 /chicheng-gate/login、/chicheng-gate/logout、/chicheng-gate/password、/chicheng-gate/status、/chicheng-gate/restart 路由。
   - frpc 管理：自动下载/启动/停止 frpc（存放于 $DSH_HOME/frpc/，PID 记在 frpc.pid），按设置实时开关。
   - 独立密码网关：监听 127.0.0.1 的「本机端口」，反向代理（HTTP + WebSocket + SSE）到 DSH 主端口，复用同一套密码/会话。
@@ -110,9 +110,10 @@ GitHub 安装：
 ## 常见问题
 
 - 改了远程访问 / frpc 配置没生效：需要重启 dsh web（frpc 的「启用」开关本身是实时的，无需重启）。
+- 非本机访问（0.0.0.0 / 局域网 IP / 公网隧道）设置页报 `transport failure for /api/settings.describe: HTTP 403`：这是 DSH 的 /api 信任门禁。开启远程访问后，插件会把访问来源写进 connection 的 trustedHosts 并移除 settings 的特权限制，但**这些改动要重启 dsh web 才生效**——重启后 403 消失、设置与主题才会同步。
 - frps 上不显示端口 / 公网打不开：检查 frpc 状态（设置页有实时状态），常见原因是「远程端口」在 frps 上被占用，或 frps 的 vhostHTTPPort 占用了同一个端口。换一个空闲端口即可。
 - 公网能打开但弹登录页：正常，走隧道必须输入面板密码；本机 127.0.0.1 不需要。
-- 资源管理器 / 设置 403：确认远程访问已开、trustedHosts 已包含访问来源，并已重启。
+- 登录限速按来源 IP 计数（5 次/分/IP）：公司/宿舍 NAT 下多台设备共享同一公网 IP，可能互相触发限速，稍等一分钟再试即可。
 
 ---
 
